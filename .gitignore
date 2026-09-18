@@ -1,0 +1,11 @@
+# dependencies
+node_modules/
+
+# secrets
+.env
+
+# generated from manifest.template.xml by `npm run manifest`
+manifest.xml
+
+# macOS
+.DS_Store

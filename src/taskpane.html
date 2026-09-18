@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pangram</title>
+  <link rel="icon" href="assets/pangram-logo.svg">
+  <link rel="stylesheet" href="taskpane.css">
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <img src="assets/pangram-logo.svg" alt="" width="18" height="18">
+        <span>Pangram</span>
+      </div>
+      <div class="topbar-actions">
+        <button id="btn-refresh" class="icon-btn" title="Run Pangram on this document" aria-label="Refresh" disabled>
+          <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M10 3a7 7 0 0 1 6.32 4H14a1 1 0 1 0 0 2h4a1 1 0 0 0 1-1V4a1 1 0 1 0-2 0v1.26A9 9 0 0 0 1 10a1 1 0 1 0 2 0 7 7 0 0 1 7-7Zm7 6a1 1 0 0 1 1 1 7 7 0 0 1-7 7 7 7 0 0 1-6.32-4H6a1 1 0 1 0 0-2H2a1 1 0 0 0-1 1v4a1 1 0 1 0 2 0v-1.26A9 9 0 0 0 19 10a1 1 0 0 0-1-1h-1Z"/></svg>
+        </button>
+        <button id="btn-settings" class="icon-btn" title="Settings" aria-label="Settings">
+          <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8.6 2.3a1 1 0 0 1 1-.8h.8a1 1 0 0 1 1 .8l.3 1.5c.5.2 1 .4 1.4.8l1.4-.5a1 1 0 0 1 1.2.4l.4.7a1 1 0 0 1-.2 1.3l-1.1 1a6 6 0 0 1 0 1.6l1.1 1a1 1 0 0 1 .2 1.3l-.4.7a1 1 0 0 1-1.2.4l-1.4-.5c-.4.4-.9.6-1.4.8l-.3 1.5a1 1 0 0 1-1 .8h-.8a1 1 0 0 1-1-.8l-.3-1.5c-.5-.2-1-.4-1.4-.8l-1.4.5a1 1 0 0 1-1.2-.4l-.4-.7a1 1 0 0 1 .2-1.3l1.1-1a6 6 0 0 1 0-1.6l-1.1-1a1 1 0 0 1-.2-1.3l.4-.7a1 1 0 0 1 1.2-.4l1.4.5c.4-.4.9-.6 1.4-.8l.3-1.5ZM10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section id="settings" class="settings" hidden>
+      <label for="api-key">Pangram API key</label>
+      <div class="row">
+        <input id="api-key" type="password" placeholder="Paste your key" autocomplete="off" spellcheck="false">
+        <button id="btn-save-key" class="btn btn-secondary">Save</button>
+      </div>
+      <p id="settings-hint" class="hint">Stored only in this pane. Leave blank to use the key from the server's .env file.</p>
+    </section>
+
+    <main>
+      <section class="card">
+        <div class="card-head">
+          <div class="verdict-block">
+            <div id="verdict" class="verdict verdict-idle">
+              <span class="dot"></span>
+              <span id="verdict-text">Not analyzed</span>
+            </div>
+            <div id="scanned" class="scanned">Click Analyze to score this document</div>
+          </div>
+          <div id="model-badge" class="badge" title="Pangram model version">
+            <img src="assets/pangram-logo.svg" alt="" width="14" height="14">
+            <span>Pangram</span><b id="model-version"></b>
+          </div>
+        </div>
+
+        <p id="status" class="status"></p>
+
+        <div class="dial-wrap">
+          <svg id="dial" class="dial" viewBox="0 0 200 200" role="img" aria-labelledby="dial-title">
+            <title id="dial-title">AI share of this document</title>
+            <path id="dial-track" class="dial-track" d="" />
+            <path id="seg-ai" class="seg seg-ai" d="" />
+            <path id="seg-assisted" class="seg seg-assisted" d="" />
+            <path id="seg-human" class="seg seg-human" d="" />
+          </svg>
+          <div class="dial-center">
+            <div id="dial-icon" class="dial-icon"><img src="assets/pangram-logo.svg" alt="" width="18" height="18"></div>
+            <div id="dial-number" class="dial-number"><span class="dial-dash">—</span></div>
+            <div id="dial-caption" class="dial-caption">of this text is AI</div>
+          </div>
+        </div>
+
+        <div id="legend" class="legend" hidden>
+          <span><i class="sw sw-ai"></i>AI <b id="pct-ai">0%</b></span>
+          <span id="legend-assisted"><i class="sw sw-assisted"></i>AI-assisted <b id="pct-assisted">0%</b></span>
+          <span><i class="sw sw-human"></i>Human <b id="pct-human">0%</b></span>
+        </div>
+
+        <div class="actions">
+          <button id="btn-analyze" class="btn btn-primary" disabled>Analyze document</button>
+          <button id="btn-full" class="btn btn-secondary" hidden>Full analysis ↗</button>
+        </div>
+      </section>
+
+      <p id="meta" class="meta"></p>
+    </main>
+
+    <footer class="disclaimer">Third party extension. No affiliation to Pangram.</footer>
+  </div>
+
+  <script src="taskpane.js"></script>
+</body>
+</html>
