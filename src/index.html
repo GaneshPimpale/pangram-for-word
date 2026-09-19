@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pangram for Word</title>
+  <link rel="icon" href="assets/pangram-logo.svg">
+  <style>
+    :root { --bg:#fff; --text:#1b1b1f; --muted:#6b6b75; --border:#e1e1e3; --accent:#ff6106; --code:#f4f4f5; color-scheme: light; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#1b1b1d; --text:#f1f1f1; --muted:#a3a3a8; --border:#38383c; --code:#2a2a2d; color-scheme: dark; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 -apple-system,"Segoe UI",system-ui,Helvetica,Arial,sans-serif; -webkit-font-smoothing:antialiased; }
+    main { max-width: 40rem; margin: 0 auto; padding: 4rem 1.5rem 3rem; }
+    h1 { display:flex; align-items:center; gap:.6rem; font-size:1.6rem; letter-spacing:-.01em; margin:0 0 1rem; }
+    h2 { font-size:1rem; margin:2.2rem 0 .6rem; }
+    p, li { color:var(--text); }
+    a { color:var(--accent); }
+    ol { padding-left:1.25rem; } li { margin:.45rem 0; }
+    code { background:var(--code); padding:.1em .35em; border-radius:4px; font-size:.85em; word-break:break-all; }
+    .btn { display:inline-block; margin:.5rem 0 0; padding:.6rem 1rem; border-radius:8px; background:var(--accent); color:#fff; text-decoration:none; font-weight:600; }
+    .muted { color:var(--muted); font-size:.9rem; }
+    footer { margin-top:3rem; padding-top:1.2rem; border-top:1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1><img src="assets/pangram-logo.svg" alt="" width="28" height="28">Pangram for Word</h1>
+    <p>A Microsoft Word add-in that scores the open document with <a href="https://www.pangram.com">Pangram</a> AI detection: one number, a gauge, and a link to the full analysis. You bring your own Pangram API key.</p>
+    <a class="btn" href="manifest.xml" download="pangram-for-word.xml">Download the add-in manifest</a>
+
+    <h2>Install</h2>
+    <ol>
+      <li><strong>Mac:</strong> put the manifest in <code>~/Library/Containers/com.microsoft.Word/Data/Documents/wef/</code> (create the <code>wef</code> folder if needed; Finder works if Terminal is blocked).<br><strong>Windows:</strong> use a <a href="https://learn.microsoft.com/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins">shared-folder catalog</a>.</li>
+      <li>Quit and reopen Word, then click <strong>Pangram</strong> on the Home tab.</li>
+      <li>Open the pane's settings (gear icon), paste your Pangram API key, and hit <strong>Analyze document</strong>.</li>
+    </ol>
+
+    <h2>Privacy</h2>
+    <p>Your API key is kept in the add-in pane's local storage on your device. When you run an analysis, the key and the document's text pass through this server to Pangram's API, because Pangram's API cannot be called directly from the pane. Neither is stored or logged here. If you would rather not rely on this host, the project is open source and deploys to your own Vercel account or runs on localhost.</p>
+
+    <footer class="muted">
+      Third party extension. No affiliation to Pangram. &middot;
+      <a href="https://github.com/GaneshPimpale/pangram-for-word">Source on GitHub</a>
+    </footer>
+  </main>
+</body>
+</html>

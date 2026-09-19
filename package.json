@@ -5,13 +5,13 @@
   "description": "Microsoft Word task-pane add-in that scores the open document with Pangram AI detection.",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "start": "node scripts/dev-server.mjs",
+    "build": "node scripts/build-site.mjs",
     "manifest": "node scripts/build-manifest.mjs",
     "certs": "office-addin-dev-certs install --days 3650",
     "icons": "python3 scripts/make_icons.py",
     "sideload": "npm run -s manifest && bash scripts/sideload.sh",
-    "unsideload": "rm -f \"$HOME/Library/Containers/com.microsoft.Word/Data/Documents/wef/pangram-for-word.xml\"",
-    "publish:site": "node scripts/publish-site.mjs"
+    "unsideload": "rm -f \"$HOME/Library/Containers/com.microsoft.Word/Data/Documents/wef/pangram-for-word.xml\""
   },
   "devDependencies": {
     "office-addin-dev-certs": "^3.0.0"
@@ -23,24 +23,5 @@
     "type": "git",
     "url": "git+https://github.com/GaneshPimpale/pangram-for-word.git"
   },
-  "license": "MIT",
-  "bin": {
-    "pangram-for-word-publish": "scripts/publish-site.mjs"
-  },
-  "files": [
-    "lib",
-    "src",
-    "assets",
-    "scripts",
-    "site",
-    "manifest.template.xml",
-    "server.js",
-    "README.md"
-  ],
-  "exports": {
-    ".": "./lib/pangram.mjs",
-    "./lib/pangram.mjs": "./lib/pangram.mjs",
-    "./package.json": "./package.json"
-  },
-  "types": "./lib/pangram.d.mts"
+  "license": "MIT"
 }

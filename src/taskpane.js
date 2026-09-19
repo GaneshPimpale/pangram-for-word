@@ -220,6 +220,7 @@
   };
 
   function openExternal(url) {
+    try { if (new URL(url).protocol !== "https:") return; } catch { return; }
     try {
       if (typeof Office !== "undefined" && Office.context?.ui?.openBrowserWindow &&
           Office.context.requirements?.isSetSupported?.("OpenBrowserWindowApi", "1.1")) {

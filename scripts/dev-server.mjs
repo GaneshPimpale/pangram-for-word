@@ -1,15 +1,17 @@
-// Local HTTPS dev server for the Pangram Word add-in.
+// Local HTTPS dev server for the Pangram Word add-in. LOCAL ONLY.
+// It lives in scripts/ (not the repo root) on purpose: Vercel auto-detects a root-level
+// server.js/index.js/app.js as the app entrypoint and would try to run it in production.
 // Serves the task pane from ./src and ./assets, and runs the same proxy
-// handlers (lib/pangram.mjs) that a hosted deployment uses.
+// handlers (lib/pangram.mjs) that the hosted deployment (api/*.js) uses.
 import https from "node:https";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { generateCertificates, verifyCertificates, isCaCertificateInstalled } from "office-addin-dev-certs";
-import { handleStatus, handleAnalyze } from "./lib/pangram.mjs";
+import { handleStatus, handleAnalyze } from "../lib/pangram.mjs";
 
-const ROOT = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ENV_FILE = path.join(ROOT, ".env");
 if (fs.existsSync(ENV_FILE)) process.loadEnvFile(ENV_FILE);
 
@@ -62,15 +64,18 @@ async function callHandler(handler, req, res, url) {
   }
 }
 
+// Local only: fall back to PANGRAM_API_KEY from .env. The hosted functions never do.
+const LOCAL = { allowServerKey: true };
 const API = {
-  "GET /api/status": handleStatus,
-  "POST /api/analyze": handleAnalyze,
+  "GET /api/status": (req) => handleStatus(req, LOCAL),
+  "POST /api/analyze": (req) => handleAnalyze(req, LOCAL),
 };
 
 function serveStatic(res, urlPath) {
   const clean = path.posix.normalize(urlPath).replace(/^(\.\.[/\\])+/, "");
-  const rel = clean === "/" ? "/taskpane.html" : clean;
-  const base = rel.startsWith("/assets/") ? ROOT : path.join(ROOT, "src");
+  const rel = clean === "/" ? "/index.html" : clean;
+  // assets/ and the generated manifest.xml live at the repo root; everything else in src/.
+  const base = rel.startsWith("/assets/") || rel === "/manifest.xml" ? ROOT : path.join(ROOT, "src");
   const file = path.join(base, rel);
   if (!file.startsWith(base) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
     return send(res, 404, "Not found", "text/plain");

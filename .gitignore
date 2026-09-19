@@ -9,3 +9,7 @@ manifest.xml
 
 # macOS
 .DS_Store
+
+# built site (npm run build) and Vercel CLI state
+public/
+.vercel

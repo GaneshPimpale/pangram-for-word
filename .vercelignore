@@ -1,0 +1,8 @@
+# Local-only files that must never be part of a deployment.
+scripts/dev-server.mjs
+scripts/sideload.sh
+scripts/make_icons.py
+.env
+.env.*
+!.env.example
+manifest.xml
