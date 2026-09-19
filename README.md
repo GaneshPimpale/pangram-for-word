@@ -42,7 +42,7 @@ can depend on it and build the pane at deploy time. `site/` has the Next.js wiri
 
 ```json
 "scripts":      { "prebuild": "pangram-for-word-publish . https://example.com/pangram" },
-"dependencies": { "pangram-for-word": "github:GaneshPimpale/pangram_for_word" }
+"dependencies": { "pangram-for-word": "github:GaneshPimpale/pangram-for-word" }
 ```
 
 The prebuild copies `src/` and `assets/` into `public/pangram/` and writes a matching

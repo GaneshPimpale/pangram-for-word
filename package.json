@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GaneshPimpale/pangram_for_word.git"
+    "url": "git+https://github.com/GaneshPimpale/pangram-for-word.git"
   },
   "license": "MIT",
   "bin": {

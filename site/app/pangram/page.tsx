@@ -37,8 +37,8 @@ export default function PangramForWordPage() {
       </ol>
       <p className="leading-relaxed text-sm text-gray-500">
         Source and local-dev instructions:{" "}
-        <a href="https://github.com/GaneshPimpale/pangram_for_word" className="underline">
-          github.com/GaneshPimpale/pangram_for_word
+        <a href="https://github.com/GaneshPimpale/pangram-for-word" className="underline">
+          github.com/GaneshPimpale/pangram-for-word
         </a>
       </p>
       <Link href="/" className="text-sm text-gray-400 hover:text-gray-900 transition-colors">

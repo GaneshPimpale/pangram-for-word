@@ -4,7 +4,7 @@
 
    ```json
    "scripts": { "prebuild": "pangram-for-word-publish . https://your-site.com/pangram" },
-   "dependencies": { "pangram-for-word": "github:GaneshPimpale/pangram_for_word" }
+   "dependencies": { "pangram-for-word": "github:GaneshPimpale/pangram-for-word" }
    ```
 
    The prebuild copies the pane into `public/pangram/` and writes a matching
