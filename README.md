@@ -13,9 +13,23 @@ cp .env.example .env # then set PANGRAM_API_KEY (and optionally PANGRAM_MODEL)
 npm run sideload     # renders manifest.xml for ADDIN_BASE_URL and copies it into Word's add-in folder (Mac)
 ```
 
-If macOS refuses to write into Word's folder from the terminal, run `npm run manifest`
-and copy `manifest.xml` into
-`~/Library/Containers/com.microsoft.Word/Data/Documents/wef/` with Finder instead.
+### If `npm run sideload` says "Operation not permitted"
+
+macOS blocks Terminal from writing into another app's container, and `sudo` doesn't help.
+Finder is allowed, so render the manifest and drag it in by hand:
+
+```sh
+npm run manifest                                                  # writes manifest.xml
+open ~/Library/Containers/com.microsoft.Word/Data/Documents/wef   # Word's add-in folder
+open -R manifest.xml                                              # reveals the manifest in Finder
+```
+
+Drag `manifest.xml` into the `wef` window. Notes:
+
+- Open the full `wef` path as shown. `open` on `com.microsoft.Word` itself fails with
+  "doesn't know how to open", because macOS treats the container folder as a special item.
+- If `wef` doesn't exist yet, open its parent instead
+  (`open ~/Library/Containers/com.microsoft.Word/Data/Documents`) and create a folder named `wef`.
 
 Quit and reopen Word after sideloading. If the Home-tab button doesn't appear, use
 **Insert > Add-ins > My Add-ins > Pangram**.
@@ -38,23 +52,38 @@ pane's local storage and overrides the `.env` key.
 The repo deploys as-is: static pane + two functions, no framework. Once it's hosted, Word
 needs nothing running on your machine.
 
+**No API key goes on the server.** The deployment needs no environment variables, and you
+should not add `PANGRAM_API_KEY` to the Vercel project. The hosted functions ignore a
+server-side key even if one is set; each user pastes their own key into the pane's settings
+inside Word.
+
 1. Fork or clone this repo, then in Vercel: **Add New > Project**, import it. The included
    `vercel.json` sets the build command, output directory, function timeout, and headers.
-   No environment variables are required.
+   Leave the framework preset as "Other" and add no environment variables.
 2. Optional: **Settings > Domains**, add a domain such as `pangram.example.com`. Use a
    dedicated (sub)domain so the pane's stored API key has its own origin. Redeploy after
    adding it so the manifest picks it up.
-3. Open the deployment, download `manifest.xml` from the landing page, and sideload it
-   (Mac: the `wef` folder above; Windows: a shared-folder catalog).
+3. Open the deployment and download `manifest.xml` from the landing page, then sideload it.
+   On a Mac, drag it into Word's add-in folder:
+
+   ```sh
+   open ~/Library/Containers/com.microsoft.Word/Data/Documents/wef
+   open -R ~/Downloads/manifest.xml
+   ```
+
+   A `manifest.xml` already in `wef` is your localhost add-in. Replace it to use only the
+   hosted one, or rename the download first (e.g. `pangram-hosted.xml`) to keep both.
+   On Windows, use a shared-folder catalog.
+4. Quit and reopen Word, open the pane, click the gear icon, and paste your Pangram API key.
 
 The build writes a `manifest.xml` that points at the project's production domain
 (`VERCEL_PROJECT_PRODUCTION_URL`). To force a different URL, set `ADDIN_BASE_URL` as a
 project environment variable.
 
-**Keys on the hosted version.** The functions in `api/` never read `PANGRAM_API_KEY`;
-each user pastes their own key in the pane. It is kept in the pane's local storage and
-forwarded with each request to Pangram, along with the document text. Nothing is stored
-or logged server-side. Only the local server (`npm start`) falls back to the `.env` key.
+**Where the key lives.** On the hosted version the key is kept in the pane's local storage
+on the user's machine and forwarded with each request to Pangram, along with the document
+text. Nothing is stored or logged server-side. The `.env` key is only for the local server
+(`npm start`); `.env` is gitignored and excluded from deployments.
 
 ## Layout
 
@@ -75,4 +104,5 @@ or logged server-side. Only the local server (`npm start`) falls back to the `.e
 - Model version comes from the response's `version` field.
 - Pangram bills per request. A `402 Insufficient credits` error means the account
   behind the key has no API credits.
-- Port is 3939; change it in `.env` **and** `manifest.xml` together.
+- Port is 3939. To change it, update `PORT` and `ADDIN_BASE_URL` in `.env` together, then
+  re-run `npm run sideload` so the manifest matches.
