@@ -1,13 +1,8 @@
 # Pangram for Word
 
 A Microsoft Word task-pane add-in that scores the open document with
-[Pangram](https://www.pangram.com) AI detection. Click **Pangram** on the Home tab,
-hit **Analyze document**, and the pane shows the AI percentage on a semicircle dial,
-the AI / AI-assisted / human split, the Pangram model version, and a **Full analysis**
-button that opens the result in the Pangram dashboard.
-
-No build step: plain HTML/CSS/JS served by a tiny Node HTTPS server that also proxies
-to Pangram (the API sends no CORS headers, and this keeps your key out of the webview).
+[Pangram](https://www.pangram.com) AI detection. Click **Pangram** on the Home tab
+and hit **Analyze document**.
 
 ## One-time setup (local)
 
@@ -78,8 +73,7 @@ kept in the pane's local storage and sent straight through to Pangram.
 
 ## Notes
 
-- The dial shows the non-human share (`fraction_ai + fraction_ai_assisted`); the bar
-  underneath shows the split. Model version comes from the response's `version` field.
+- Model version comes from the response's `version` field.
 - Pangram bills per request. A `402 Insufficient credits` error means the account
   behind the key has no API credits.
 - Port is 3939; change it in `.env` **and** `manifest.xml` together.
